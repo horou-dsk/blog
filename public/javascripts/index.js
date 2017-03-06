@@ -1,0 +1,1 @@
+"use strict";function _classCallCheck(n,o){if(!(n instanceof o))throw new TypeError("Cannot call a class as a function")}!function(n){var o=function n(){_classCallCheck(this,n),console.log("你好"),console.log("执行了")};new o}(window);
