@@ -69,7 +69,7 @@ function session_time(){
                             console.log(err);
                             return;
                         }
-                        console.log("定时清理session：id="+val.id);
+                        console.log("定时清理session：id = "+val.id);
                     });
                 }
             }
