@@ -11,7 +11,8 @@ router.all("*",function (req,res,next) {
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  //res.render('index', { title: 'Red_ButterFly的博客' });
+  controller.home(req,res);
 });
 
 router.get('/index',function (req,res) {

@@ -1,5 +1,28 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div.background-imgA
+  header.header
+    div.c-content
+      span.title Red_ButterFly的博客
+      div.r-c
+        button 登 录
+  div.page-container
+    div.article-list
+      ul
+        li
+          h2
+            a(href="https://www.baidu.com") #{info.title}
+          div.preview #{info.content}
+          div.info
+            span 作者：#{info.name}
+            span 日期：#{time}
+            span 标签：技术
+        li
+          h2
+            a(href="https://www.baidu.com") 标题标题标题
+          div.preview 内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内
+          div.info
+            span 作者：于茂
+            span 日期：2016-10-10
+            span 标签：技术

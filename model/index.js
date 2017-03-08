@@ -6,7 +6,21 @@ module.exports={
             primaryKey:true
         },
         name:Sequelize.STRING(10),
-        age:Sequelize.INTEGER(3)
+        age:Sequelize.INTEGER(3),
+        phone:Sequelize.INTEGER(20),
+        head:Sequelize.STRING(255)
+    },{
+        timestamps:false
+    }),
+    blogArticles:sequelizeMySql.define("blogArticle",{
+        id:{
+            type:Sequelize.INTEGER(11),
+            primaryKey:true
+        },
+        title:Sequelize.STRING(50),
+        content:Sequelize.STRING(),
+        date:Sequelize.STRING(),
+        user_id:Sequelize.INTEGER()
     },{
         timestamps:false
     })

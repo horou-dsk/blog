@@ -1,3 +1,6 @@
+html{
+  font-size:16px;
+}
 body{
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -5,4 +8,114 @@ body{
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+}
+li{
+  list-style: none;
+}
+ul{
+  margin:0;
+  padding:0;
+}
+a{
+  text-decoration: none;
+  color:inherit;
+}
+button{
+  cursor: pointer;
+  font-size:1rem;
+}
+.wh(@width:auto,@height:auto){
+  width:@width;
+  height:@height;
+}
+.button(@b-color:rgb(50,181,242),@font-color:#fff){
+  border:none;
+  background:@b-color;
+  color:@font-color;
+  transition: .2s;
+  &:hover{
+    background: darken(@b-color,5%);
+  }
+  &:active{
+    background: darken(@b-color,10%);
+  }
+}
+@imgpath:"../images/";
+.background-imgA{
+  position:fixed;
+  z-index:-1;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  background:url("@{imgpath}b2.jpg") no-repeat center fixed;
+  background-size:100%;
+}
+header.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:50px;
+  line-height:50px;
+  background:rgba(50, 181, 242,.8);
+  padding:0 50px;
+  box-shadow:0 0 5px rgba(50, 181, 242,.8);
+  span.title{
+    font-size:25px;
+    color:#fff;
+  }
+  .r-c{
+    float:right;
+    height:50px;
+    button{
+      height:100%;
+      padding:0 12px;
+      .button(rgb(13, 176, 242),#fff);
+    }
+  }
+}
+
+.page-container{
+  .article-list{
+    padding:80px 100px 50px 100px;
+    ul{
+      .wh(100%,100%);
+      background:rgba(255,255,255,.8);
+      box-shadow: 0 0 5px rgba(255,255,255,.8);
+      padding:20px 20px 20px 450px;
+      h2{
+        a{
+          transition: .3s;
+        }
+        &>a:hover{
+          margin-left:30px;
+          color:#6f5499;
+        }
+      }
+      li{
+        border-top:1px dotted #ff0000;
+        margin-top:30px;
+        padding-top:10px;
+        &:first-child{
+          border:none;
+          margin-top:0;
+          padding-top:0;
+        }
+        &>.preview{
+          color:#756F71;
+          line-height:20px;
+        }
+        .info{
+          text-align: right;
+          padding-right:80px;
+          margin-top:10px;
+          color:#c95d5d;
+          span{
+            margin-right:30px;
+          }
+        }
+      }
+    }
+  }
 }
