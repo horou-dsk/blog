@@ -1,0 +1,18 @@
+.fontello{
+  font-family: fontello;
+}
+.fontello.icon-email:before{
+  content:"@";
+}
+.fontello.icon-user:before{
+  content:'\e808';
+}
+.fontello.icon-lock:before{
+  content:'\e821';
+}
+.fontello.icon-ok:before{
+  content:'\e812';
+}
+.fontello.icon-cancel:before{
+  content:"\e815";
+}
