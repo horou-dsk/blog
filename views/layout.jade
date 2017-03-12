@@ -2,8 +2,16 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href="/stylesheets/lib/wangEditor.min.css")
+    link(rel='stylesheet', href='/stylesheets/frames.css')
     link(rel='stylesheet', href='/stylesheets/index.css')
     link(rel='stylesheet', href='/stylesheets/fontello.css')
+    script(src="/javascripts/lib/jquery-3.1.0.min.js")
   body
     block content
+    div.xly-layer.out(style="display:none")
+      div.lay-bg
+      div.lay-modal
+        span.lay-textContent 提示内容
+  script(src="/javascripts/lib/wangEditor.min.js")
   script(src="/javascripts/index.js")

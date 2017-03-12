@@ -2,11 +2,7 @@ extends layout
 
 block content
   div.background-imgA
-  header.header
-    div.c-content
-      span.title Red_ButterFly的博客
-      div.r-c
-        button#login-btn 登 录
+  include head
   div.page-container(y_ctrl="home")
     div.login-dialog-container.out
       div.login-bg
@@ -28,8 +24,10 @@ block content
           div.l-row
             label
               input.check(type="checkbox", name="autologin")
+              i.check-box
+                span.fontello.icon-ok
               span 下次自动登录
-          button.login-btn
+          button.login-btn(type="button")
             span.fontello.icon-ok
             span 登录
         form.register-form(style="display:none")
@@ -44,19 +42,12 @@ block content
     div.article-list
       div.left_bg
       ul
-        li
-          h2
-            a(href="https://www.baidu.com") #{info.title}
-          div.preview #{info.content}
-          div.info
-            span 作者：#{info.name}
-            span 日期：#{time}
-            span 标签：技术
-        li
-          h2
-            a(href="https://www.baidu.com") 标题标题标题
-          div.preview 内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容内容内容内容内容内容共容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内容共内容内容内容内容内容内容共内容内容内容内容内容内容共内
-          div.info
-            span 作者：于茂
-            span 日期：2016-10-10
-            span 标签：技术
+        each item in info
+          li
+            h2
+              a(href="https://www.baidu.com") #{item.title}
+            div.preview!=item.content
+            div.info
+              span 作者：#{item.name}
+              span 日期：#{item.create_date}
+              span 标签：技术

@@ -6,8 +6,7 @@ require("../db/mysql");
 var controller=require("../routes/controller");
 router.all("*",function (req,res,next) {
    session(req,res);
-   if(filter(req,res))
-   next();
+   filter(req,res,next);
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -26,5 +25,22 @@ router.get('/home',function (req,res) {
     req.getSession(['wq','haha','nihao']);
     controller.home(req,res);
 });
-
+router.post('/login',function(req,res){
+    controller.login(req,res);
+});
+router.get('/exitlogin',function(req,res){
+    controller.relogin(req,res);
+});
+router.get('/account',function(req,res){
+    controller.account(req,res);
+});
+router.post('/editorimg',function (req,res) {
+    controller.editorimg(req,res);
+});
+router.get('/register-xly',function (req,res) {
+    controller.register(req,res);
+});
+router.post('/newpost',function (req,res) {
+    controller.newpost(req,res);
+});
 module.exports = router;

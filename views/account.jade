@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  include head
+  div.page-container
+    div.account-container
+      div.account-menu-list
+        ul
+          li.active
+            a
+              span.fontello.icon-brush
+              span 发布帖子
+          li
+            a
+              span.fontello.icon-pin
+              span 我的帖子
+          li
+            a
+              span.fontello.icon-user
+              span 账号设置
+          li
+            a(href="/exitlogin")
+              span.fontello.icon-off
+              span 退出登录
+      div.account-content
+        case inmodal
+          when 'new-post'
+            include new-post
+          default
+            include new-post

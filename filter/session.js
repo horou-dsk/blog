@@ -60,17 +60,24 @@ global.isArray=function(object){
 function session_time(){
     var current_time=Date.now();
     mongoCollection("webSession",collection=>{
+        function removeSession(sid){
+            collection.remove({id:sid},function(err,rr){
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                console.log("定时清理session：id = "+sid);
+            });
+        }
         collection.find().toArray(function(err,result){
             if(err)return;
-            for(var val of result){
-                if(current_time-val.time>3600000){
-                    collection.remove({id:val.id},function(err,rr){
-                        if(err){
-                            console.log(err);
-                            return;
-                        }
-                        console.log("定时清理session：id = "+val.id);
-                    });
+            for(let val of result){
+                if(val._session.expireTime){
+                    if(val._session.expireTime-current_time<=0){
+                        removeSession(val.id);
+                    }
+                }else if(current_time-val.time>18000000){
+                    removeSession(val.id);
                 }
             }
         });
@@ -88,7 +95,7 @@ module.exports=function(req,res){
                 .digest('hex');
             res.cookie(".ExS",ExS,{httpOnly:true});
             mongoCollection("webSession",collection=>{
-                collection.insert({"id":ExS,time:Date.now()});
+                collection.insert({"id":ExS,time:Date.now(),_session:{}});
             });
         }
         if(!ExS) {
@@ -96,14 +103,23 @@ module.exports=function(req,res){
         }
         req.sbodys={};
         req.getSession_num=0;
+        req.getSessionId=function(){
+            return ExS;
+        };
         req.setSession=function(val){
             req.isSetSession=true;
             mongoCollection("webSession",collection=>{
                 collection.findOne({id:ExS},function(err,data){
+                    let session_data={};
                     if(!data){
-                        collection.insert({id:ExS,time:Date.now()});
+                        collection.insert({id:ExS,time:Date.now(),_session:{}});
+                    }else{
+                        session_data=data._session;
                     }
-                    collection.update({id:ExS},{$set:val},true,false);
+                    for(let k in val){
+                        session_data[k]=val[k];
+                    }
+                    collection.update({id:ExS},{$set:{_session:session_data}},true,false);
                     req.isSetSession=false;
                 });
             });
@@ -116,13 +132,16 @@ module.exports=function(req,res){
                         collection.findOne({id:ExS}).then(e=>{
                             var value;
                             if(!e){
-                                collection.insert({id:ExS,time:Date.now()});
+                                collection.insert({id:ExS,time:Date.now(),_session:{}});
                                 if(typeof fn==="function"){
                                     fn({});
+                                }else if(typeof key==='function'){
+                                    key({});
                                 }
                                 req.getSession_num--;
                                 return;
                             }
+                            e=e._session||{};
                             if(isArray(key)){
                                 for(var v of key){
                                     value=e[v];
@@ -130,6 +149,9 @@ module.exports=function(req,res){
                                         value=null;
                                     req.sbodys[v]=value;
                                 }
+                            }else if(typeof key==='function'){
+                                req.sbodys=e;
+                                fn=key;
                             }else{
                                 value=e[key];
                                 if(!value)
@@ -145,6 +167,18 @@ module.exports=function(req,res){
                     interval.cancel(timer);
                 }
             },100);
+        };
+        req.clearSession=function(){
+            req.getSession_num++;
+            mongoCollection("webSession",collection=>{
+                collection.findOne({id:ExS},function(err,data){
+                    if(!data){
+                        collection.insert({id:ExS,time:Date.now(),_session:{}});
+                    }
+                    collection.update({id:ExS},{$set:{_session:{}}},true,false);
+                    req.getSession_num--;
+                });
+            });
         };
         req.setFn=function(fn){
             var timer=interval(function(){

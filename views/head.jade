@@ -1,0 +1,30 @@
+header.header
+  div.c-content
+    span.title
+      a(href="/") Red_ButterFly的博客
+    div.r-c
+      if userinfo.id
+        div.user-head
+          a(href="https://www.baidu.com")
+            - var head=userinfo.head;
+            img(src="#{head}")
+            span.fontello.icon-angle-down
+          ul.user-menu-box
+            li
+              a(href="/account/?tab=new-post")
+                span.fontello.icon-brush
+                span 发布帖子
+            li
+              a(href="")
+                span.fontello.icon-pin
+                span 我的帖子
+            li
+              a
+                span.fontello.icon-cog-alt
+                span 账号设置
+            li
+              a(href="/exitlogin")
+                span.fontello.icon-off
+                span 退出登录
+      else
+        button#login-btn 登 录

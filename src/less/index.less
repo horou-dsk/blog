@@ -3,6 +3,7 @@ html{
 }
 body{
   font-family: "Microsoft Yahei",sans-serif;
+  background-color: #f6f6f6;
 }
 @fonturl:"../fonts/";
 @font-face {
@@ -25,7 +26,7 @@ body{
 li{
   list-style: none;
 }
-ul{
+ul,body,p{
   margin:0;
   padding:0;
 }
@@ -52,10 +53,10 @@ button[disabled]{
   color:@font-color;
   transition: .2s;
   &:hover{
-    background: darken(@b-color,5%);
+    background: darken(@b-color,10%);
   }
   &:active{
-    background: darken(@b-color,10%);
+    background: darken(@b-color,20%);
   }
 }
 @imgpath:"../images/";
@@ -92,16 +93,132 @@ header.header{
       padding:0 12px;
       .button(#e14d43,#fff);
     }
+    .user-head{
+      display: inline-block;
+      position: relative;
+      img{
+        .wh(40px,40px);
+        vertical-align: middle;
+        border-radius: 50%;
+        margin-right:4px;
+      }
+      &:hover{
+        .user-menu-box{
+          transition: .5s;
+          top:110%;
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+      .user-menu-box{
+        pointer-events: none;
+        opacity: 0;
+        background: #fff;
+        font-size:13px;
+        color:#535353;
+        border:2px solid #e14d43;
+        border-radius: 4px;
+        box-shadow: 0 0 1px 1px rgba(0,0,0,0.1);
+        line-height: normal;
+        width:150px;
+        position: absolute;
+        right:0;
+        top:180%;
+        &:before{
+          content:'';
+          position: absolute;
+          display: inline-block;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-bottom: 8px solid #e14d43;
+          top:-8px;
+          right:20px;
+        }
+        &:after{
+          content:'';
+          position: absolute;
+          display: inline-block;
+          width:100%;
+          height:20px;
+          top:-20px;
+        }
+        li{
+          a{
+            padding:8px 12px 8px 12px;
+            width: 100%;
+            display: inline-block;
+          }
+          .fontello{
+            display: inline-block;
+            width:20px;
+            text-align: center;
+            font-size:11px;
+          }
+        }
+        li:hover{
+          background: #e14d43;
+          color:#fff;
+          cursor: pointer;
+        }
+      }
+    }
   }
 }
 
 @fontcolor1:#666;
+.xly-layer{
+  position: fixed;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  z-index:100;
+  display: flex;
+  transition: .4s;
+  &.out{
+    .lay-bg{
+      opacity:0;
+    }
+    .lay-modal{
+      opacity: 0;
+    }
+  }
+  &.in{
+    .lay-bg{
+      opacity:1;
+    }
+    .lay-modal{
+      opacity: 1;
+    }
+  }
+  .lay-bg{
+    .wh(100%,100%);
+    position: absolute;
+    background: rgba(0,0,0,.4);
+    transition: .4s;
+  }
+  .lay-modal{
+    transition: .4s;
+    background:#e14d43;
+    color:#fff;
+    font-size:1.2rem;
+    padding:10px 20px 10px 20px;
+    position: absolute;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,.5);
+    z-index: 1;
+  }
+}
 .page-container{
+  min-width:1200px;
   .login-dialog-container.out{
     opacity: 0;
   }
   .login-dialog-container.in{
     opacity:1;
+    .login-modal{
+      animation: elastic .7s;
+    }
   }
   .login-dialog-container{
     position: fixed;
@@ -177,6 +294,35 @@ header.header{
           }
           input.check{
             vertical-align: middle;
+            display: none;
+          }
+          label{
+            display: inline-block;
+            cursor: pointer;
+          }
+          .check-box{
+            .wh(16px,16px);
+            position: relative;
+            display: inline-block;
+            border:1px solid @fontcolor1;
+            vertical-align: sub;
+            margin-right:5px;
+            font-size:16px;
+            left:0;
+            top:0;
+            color:#fff;
+            span{
+              position: absolute;
+              top:-1px;
+              left:0;
+              display: none;
+            }
+          }
+          input.check:checked+.check-box{
+            background:@fontcolor1;
+            span{
+              display: inline;
+            }
           }
         }
         //登录按钮
@@ -199,8 +345,8 @@ header.header{
     background-size:cover;
     .wh(400px,700px);
     position: absolute;
-    left:130px;
-    top: 110px;
+    left:120px;
+    top: 100px;
   }
   .article-list{
     padding:80px 100px 50px 100px;
@@ -231,6 +377,7 @@ header.header{
         &>.preview{
           color:#756F71;
           line-height:20px;
+          font-size:13px;
         }
         .info{
           text-align: right;
@@ -239,6 +386,94 @@ header.header{
           color:#c95d5d;
           span{
             margin-right:30px;
+          }
+        }
+      }
+    }
+  }
+}
+.account-container{
+  padding:80px 100px 80px 100px;
+  font-size:13px;
+  color:@fontcolor1;
+  .account-menu-list{
+    ul{
+      background-color:#fff;
+      float:left;
+      width:120px;
+      border-radius: 4px;
+      border:1px solid #eee;
+      li{
+        border-bottom:1px solid #eee;
+        cursor: pointer;
+        &:last-child{
+          border-bottom: none;
+        }
+        &.active>a,&:hover>a{
+          &:before{
+            content:'';
+            display: inline-block;
+            position: absolute;
+            width:4px;
+            height:100%;
+            background-color: #e14d43;
+            left:0;
+            top:0;
+          }
+          color:#e14d43;
+        }
+        a{
+          padding:8px 10px 8px 10px;
+          display: inline-block;
+          position: relative;
+          .fontello{
+            width:20px;
+            text-align: center;
+            font-size:11px;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+  .account-content{
+    background-color: #fff;
+    min-height:500px;
+    margin-left:140px;
+    .new-post{
+      padding-top:20px;
+      .i-row{
+        display: flex;
+        padding:12px 20px 12px 20px;
+        .left-title{
+          width:80px;
+          font-weight: bold;
+          display: flex;
+          -webkit-align-items: center;
+          align-items: center;
+        }
+        .r-content{
+          flex:1;
+          input{
+            outline: none;
+            border-radius:4px;
+            padding:0 10px;
+            border:1px solid rgba(0,0,0,.1);
+            .wh(100%,30px);
+            transition:.3s;
+            &:focus{
+              border-color: #e14d43;
+              box-shadow: 0 0 3px #e14d43;
+            }
+          }
+          #editor-trigger{
+            height:300px;
+          }
+          #subPost{
+            .wh(100%,30px);
+            .button(#4caf50,#fff);
+            font-size:13px;
+            border-radius: 4px;
           }
         }
       }

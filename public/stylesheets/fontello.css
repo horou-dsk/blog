@@ -16,3 +16,21 @@
 .fontello.icon-cancel:before{
   content:"\e815";
 }
+.fontello.icon-down-open:before{
+  content:"\e859";
+}
+.fontello.icon-angle-down:before{
+  content:"\f107";
+}
+.fontello.icon-brush:before{
+  content:"\f1fc";
+}
+.fontello.icon-pin:before{
+  content:"\e823";
+}
+.fontello.icon-cog-alt:before{
+  content:"\e840";
+}
+.fontello.icon-off:before{
+  content:"\e88c";
+}
