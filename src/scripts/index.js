@@ -131,7 +131,7 @@
             }
         }
     };
-
+    var JQuery=$;
     var xly_layer=function(){
         this.container=document.querySelector(".xly-layer");
         this.bg=this.container.querySelector(".lay-bg");
@@ -175,6 +175,14 @@
         }
 
         home(){
+            console.clear();
+            var pageloadImg=JQuery('.pageload-img');
+            JQuery(document).ready(function(){
+                pageloadImg.fadeOut(500);
+                setTimeout(function () {
+                    pageloadImg.remove();
+                },500)
+            });
             function $(elem){
                 var elems=document.querySelectorAll(elem);
                 if(elems.length>1)
@@ -243,7 +251,9 @@
         }
 
         newpost(){
-            console.log('创建文章');
+            console.clear();
+            wangEditor.config.printLog = false;
+
             var editor = new wangEditor('editor-trigger');
             // 上传图片
             editor.config.uploadImgUrl = '/editorimg';

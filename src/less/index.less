@@ -70,6 +70,15 @@ button[disabled]{
   background:url("@{imgpath}b2.jpg") no-repeat center fixed;
   background-size:cover;
 }
+.pageload-img{
+  background:rgb(217,206,165) url("@{imgpath}sys/pageload.gif") no-repeat center;
+  position: fixed;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  z-index:9999;
+}
 header.header{
   position:fixed;
   top:0;
@@ -358,10 +367,10 @@ header.header{
       padding:20px 20px 20px 450px;
       h2{
         a{
-          transition: .3s;
+          transition: .5s;
         }
         &>a:hover{
-          margin-left:30px;
+          margin-left:20px;
           color:#6f5499;
         }
       }
