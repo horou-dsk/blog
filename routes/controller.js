@@ -4,7 +4,7 @@ var path=require('path');
 const crypto = require('crypto');
 module.exports={
     home:function(req,res){
-        mysqldb.query("select * from users join blogArticles on users.id=blogArticles.user_id",function(err,data,fields){
+        mysqldb.query("select * from users join blogarticles on users.id=blogarticles.user_id",function(err,data,fields){
             if(err){
                 console.log(err);
                 return;
