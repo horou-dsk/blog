@@ -177,12 +177,12 @@
         home(){
             console.clear();
             var pageloadImg=JQuery('.pageload-img');
-            JQuery(document).ready(function(){
+            window.onload=function(){
                 pageloadImg.fadeOut(500);
                 setTimeout(function () {
                     pageloadImg.remove();
                 },500)
-            });
+            };
             function $(elem){
                 var elems=document.querySelectorAll(elem);
                 if(elems.length>1)
