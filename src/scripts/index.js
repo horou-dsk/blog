@@ -177,6 +177,7 @@
         home(){
             console.clear();
             var pageloadImg=JQuery('.pageload-img');
+            var jq=jQuery;
             window.onload=function(){
                 pageloadImg.fadeOut(500);
                 setTimeout(function () {
@@ -190,7 +191,22 @@
                 else
                     return elems[0];
             }
-            console.log("主页!");
+            let body=jq('body')[0],bimgA=jq('.background-imgA'),leftbg=jq('.page-container .left_bg');
+            var hx=body.scrollHeight-bimgA[0].offsetHeight,fix=false;
+            function leftbgpos(){
+                if(body.scrollTop>=50&&hx-body.scrollTop>=50){
+                    leftbg.removeClass('fixb');
+                    leftbg.addClass('fixt');
+                }else if(hx-body.scrollTop<50){
+                    leftbg.removeClass('fixt');
+                    leftbg.addClass('fixb');
+                }else if(body.scrollTop<50||hx-body.scrollTop<50){
+                    leftbg.removeClass('fixt');
+                    leftbg.removeClass('fixb');
+                }
+            }
+            leftbgpos();
+            window.onscroll=leftbgpos;
             var tabs=$(".tab-btn");
             var forms=$(".login-modal form");
             forOf(tabs,function(v,index){

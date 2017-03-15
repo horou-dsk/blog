@@ -4,6 +4,7 @@ html{
 body{
   font-family: "Microsoft Yahei",sans-serif;
   background-color: #f6f6f6;
+  overflow: auto;
 }
 @fonturl:"../fonts/";
 @font-face {
@@ -23,7 +24,7 @@ body{
   word-wrap: break-word;
   word-break: break-all;
 }
-li{
+ul>li{
   list-style: none;
 }
 ul,body,p{
@@ -79,6 +80,9 @@ button[disabled]{
   bottom:0;
   z-index:9999;
 }
+code{
+  font-family: Monaco;
+}
 header.header{
   position:fixed;
   top:0;
@@ -91,7 +95,7 @@ header.header{
   padding:0 50px;
   box-shadow:0 0 5px rgba(50, 181, 242,.8);
   span.title{
-    font-size:25px;
+    font-size:18px;
     color:#535353;
   }
   .r-c{
@@ -356,16 +360,25 @@ header.header{
     position: absolute;
     left:120px;
     top: 100px;
+    transition:.3s;
+    &.fixt{
+      position: fixed;
+      top:50px;
+    }
+    &.fixb{
+      position: fixed;
+      top:-50px;
+    }
   }
   .article-list{
     padding:80px 100px 50px 100px;
-    ul{
+    &>ul{
       min-height:800px;
       .wh(100%,100%);
       background:rgba(255,255,255,.8);
       box-shadow: 0 0 5px rgba(255,255,255,.8);
       padding:20px 20px 20px 450px;
-      h2{
+      h3{
         a{
           transition: .5s;
         }
@@ -374,7 +387,7 @@ header.header{
           color:#6f5499;
         }
       }
-      li{
+      &>li{
         border-top:1px dotted #ff0000;
         margin-top:30px;
         padding-top:10px;

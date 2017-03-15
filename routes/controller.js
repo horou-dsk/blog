@@ -11,6 +11,15 @@ module.exports={
             }
             for(let v of data){
                 var date=new Date(v.create_date);
+                var content=v.content.match(/<p([^>]+?|)>(?!<img)(.+?)<\/p>/);
+                if(content!=null){
+                    v.content=content[2].substr(0,4)=="<br>"?"":"<p>"+content[2]+" ......</p>";
+                }else{
+                    v.content="";
+                }
+                if(v.content.search("<code")!=-1){
+                    v.content="";
+                }
                 v.create_date=date.getFullYear()+"年"+(date.getMonth()+1)+"月"+date.getDate()+"日"+"  "+date.getHours()+":"+date.getMinutes();
             }
             req.getSession(function(reqs){
