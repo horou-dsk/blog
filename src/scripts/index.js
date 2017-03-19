@@ -174,6 +174,65 @@
 
         }
 
+        logindialog(){
+            var tabs=document.querySelectorAll(".tab-btn");
+            var forms=document.querySelectorAll(".login-modal form");
+            forOf(tabs,function(v,index){
+                v.addEventListener("click",function () {
+                    forOf(forms,function(el,i){
+                        tabs[i].className="tab-btn";
+                        el.style.display='none';
+                    });
+                    forms[index].style.display='block';
+                    tabs[index].className="tab-btn active";
+                })
+            });
+            var login_dialog=$(".login-dialog-container")[0],
+                login_bg=$('.login-bg')[0],
+                login_btn=$("#login-btn")[0],
+                close_btn=$(".login-dialog-container .close-dialog")[0];
+            if(login_btn)
+            {
+                login_btn.addEventListener("click",function () {
+                    login_dialog.style.display="flex";
+                    setTimeout(function(){
+                        login_dialog.className="login-dialog-container in";
+                    },10);
+                });
+            }
+            function login_dialog_fadeout(){
+                login_dialog.className="login-dialog-container out";
+                setTimeout(function () {
+                    login_dialog.style.display='none';
+                },400)
+            }
+            login_bg.addEventListener("click",login_dialog_fadeout);
+            close_btn.addEventListener("click",login_dialog_fadeout);
+            var login_form=$(".login-form")[0],
+                login_sub=$(".login-form .login-btn")[0],
+                layer=new xly_layer();
+            login_sub.addEventListener("click",function(){
+                $ajax({
+                    type:"POST",
+                    url:"/login",
+                    data:{
+                        username:login_form.username.value,
+                        pwd:login_form.password.value,
+                        autologin:login_form.autologin.checked
+                    },
+                    success:function(req){
+                        if(req.status){
+                            layer.show("登录成功!^_^",function(){
+                                location.reload();
+                            });
+                        }else{
+                            layer.show("用户名或密码错误!T T");
+                        }
+                    }
+                });
+            });
+        }
+
         home(){
             console.clear();
             var pageloadImg=JQuery('.pageload-img');
@@ -207,63 +266,8 @@
             }
             leftbgpos();
             window.onscroll=leftbgpos;
-            var tabs=$(".tab-btn");
-            var forms=$(".login-modal form");
-            forOf(tabs,function(v,index){
-                v.addEventListener("click",function () {
-                    forOf(forms,function(el,i){
-                        tabs[i].className="tab-btn";
-                        el.style.display='none';
-                    });
-                    forms[index].style.display='block';
-                    tabs[index].className="tab-btn active";
-                })
-            });
-            var login_dialog=$(".login-dialog-container"),
-                login_bg=$('.login-bg'),
-                login_btn=$("#login-btn"),
-                close_btn=$(".login-dialog-container .close-dialog");
-            if(login_btn)
-            {
-                login_btn.addEventListener("click",function () {
-                    login_dialog.style.display="flex";
-                    setTimeout(function(){
-                        login_dialog.className="login-dialog-container in";
-                    },10);
-                });
-            }
-            function login_dialog_fadeout(){
-                login_dialog.className="login-dialog-container out";
-                setTimeout(function () {
-                    login_dialog.style.display='none';
-                },400)
-            }
-            login_bg.addEventListener("click",login_dialog_fadeout);
-            close_btn.addEventListener("click",login_dialog_fadeout);
-            var login_form=$(".login-form"),
-                login_sub=$(".login-form .login-btn"),
-                layer=new xly_layer();
-            login_sub.addEventListener("click",function(){
-                console.log(login_form.username.value,login_form.password.value);
-                $ajax({
-                    type:"POST",
-                    url:"login",
-                    data:{
-                        username:login_form.username.value,
-                        pwd:login_form.password.value,
-                        autologin:login_form.autologin.checked
-                    },
-                    success:function(req){
-                        if(req.status){
-                            layer.show("登录成功!^_^",function(){
-                                location.reload();
-                            });
-                        }else{
-                            layer.show("用户名或密码错误!T T");
-                        }
-                    }
-                });
-            });
+
+            this.logindialog();
         }
 
         newpost(){
@@ -348,8 +352,38 @@
 
             let subPost=$('#subPost');
             let layer=new xly_layer();
+            let newTabBtn=$('.addnew-tabbtn');
+            let tabsText=`<div class="tabs"><span class="fontello icon-tabs"></span><input type="text" required placeholder="标签"><span class="fontello icon-trash-empty"></span></div>`;
+            let tabs_num=$('.tabs-num'),tabsNum=0;
+            function newBtnDis(){
+                if(tabsNum>=10){
+                    newTabBtn.attr('disabled','disabled')
+                }else{
+                    newTabBtn.removeAttr('disabled');
+                }
+            }
+            newTabBtn.on('click',function () {
+                let tab=$(tabsText);
+                tab.find('.icon-trash-empty').on('click',function () {
+                    tab.remove();
+                    tabsNum--;
+                    tabs_num.text(tabsNum);
+                    newBtnDis();
+                });
+                $(this).before(tab);
+                tabsNum++;
+                tabs_num.text(tabsNum);
+                newBtnDis();
+            });
             subPost.on("click",function () {
-                var data={title:$('#post-title').val(),content:editor.$txt.html()};
+                var tabs=$('.tabs input'),tabsData="";
+                tabs.each(function () {
+                    if(this.value!='')
+                    tabsData+=this.value+",";
+                });
+                tabsData=tabsData.replace(/,$/,'');
+                console.log(tabsData);
+                var data={title:$('#post-title').val(),content:editor.$txt.html(),tabs:tabsData};
                 console.log(data);
                 $ajax({
                     type:"POST",
@@ -366,6 +400,10 @@
                     }
                 })
             });
+        }
+
+        postContent(){
+            this.logindialog();
         }
     }
     var index=new Index();

@@ -43,4 +43,8 @@ router.get('/register-xly',function (req,res) {
 router.post('/newpost',function (req,res) {
     controller.newpost(req,res);
 });
+// router.get('/1',function(req,res){
+//     console.log('进入了！');
+//     controller.postContent(req,res);
+// });
 module.exports = router;

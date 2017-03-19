@@ -34,3 +34,15 @@
 .fontello.icon-off:before{
   content:"\e88c";
 }
+.fontello.icon-plus:before{
+  content:"\e818";
+}
+.fontello.icon-tabs:before{
+  content:"\e827";
+}
+.fontello.icon-trash-empty:before{
+  content:"\e83a";
+}
+.fontello.icon-clock:before{
+  content:'\e84a';
+}

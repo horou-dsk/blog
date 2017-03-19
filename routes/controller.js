@@ -13,17 +13,22 @@ module.exports={
                 var date=new Date(v.create_date);
                 var content=v.content.match(/<p([^>]+?|)>(?!<img)(.+?)<\/p>/);
                 if(content!=null){
-                    v.content=content[2].substr(0,4)=="<br>"?"":"<p>"+content[2]+" ......</p>";
+                    v.content=content[2].substr(0,4)=="<br>"?"":"<p>"+content[2]+"...</p>";
                 }else{
                     v.content="";
                 }
                 if(v.content.search("<code")!=-1){
                     v.content="";
                 }
+                if(v.tabs){
+                    v.tabs=v.tabs.split(',');
+                }else{
+                    v.tabs=[];
+                }
                 v.create_date=date.getFullYear()+"年"+(date.getMonth()+1)+"月"+date.getDate()+"日"+"  "+date.getHours()+":"+date.getMinutes();
             }
             req.getSession(function(reqs){
-                res.render('index', { title: 'Red_ButterFly的博客' ,info:data,userinfo:reqs});
+                res.render('index', { title: 'OGC' ,info:data,userinfo:reqs});
             });
         });
         /*var articles=yield users.getblogArticles();
@@ -159,12 +164,36 @@ module.exports={
             res.send({status:0,msg:"请输入文章内容^ ^"});
         }else{
             req.getSession(function (user) {
-                mysqldb.query('insert into blogarticles(title,content,create_date,user_id) value(?,?,?,?)',
-                    [postdata.title,postdata.content,new Date(),user.id],function(err){
+                mysqldb.query('insert into blogarticles(title,content,tabs,create_date,user_id) value(?,?,?,?,?)',
+                    [postdata.title,postdata.content,postdata.tabs,new Date(),user.id],function(err){
                     if(err)return console.log(err);
                     res.send({status:1,msg:"提交成功！"});
                 });
             });
         }
+    },
+    postContent:function (req,res) {
+        req.getSession(function (reqs) {
+            var articleId=req.url.match(/\/(\d+)\//)[1];
+            var sqlt='select * from users join blogarticles on users.id=blogarticles.user_id where blogarticles.id=?';
+            mysqldb.query(sqlt,[articleId],function (err,datas) {
+                if(err)return console.log(err);
+                var data=datas[0];
+                var createDate=new Date(data.create_date);
+                var hour=(Date.now()-createDate.getTime())/1000/60/60;
+                if(hour<1){
+                    data.create_date=Math.floor(hour*60)+"分钟前";
+                }else if(hour<24){
+                    data.create_date=Math.floor(hour)+"小时前";
+                }else if(hour<30*24){
+                    data.create_date=Math.floor(hour/24)+"天前";
+                }else if(hour/24<365){
+                    data.create_date=Math.floor(hour/24/30)+"月前";
+                }else{
+                    data.create_date=Math.floor(hour/24/30/12)+"年前";
+                }
+                res.render('post',{title:"文章标题",userinfo:reqs,bloginfo:data});
+            });
+        });
     }
 };

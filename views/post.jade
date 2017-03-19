@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  include head
+  include login-dialog
+  div.page-container.show-article(y_ctrl="postContent")
+    div.post-container
+      article.article
+        h1=bloginfo.title
+        header
+          if bloginfo.tabs!=null
+            span.fontello.icon-tabs  #{bloginfo.tabs}
+          span.fontello.icon-clock  #{bloginfo.create_date}
+          span.fontello.icon-user  #{bloginfo.name}
+        div.entry-content!=bloginfo.content
+      div.user-info

@@ -16,7 +16,7 @@ global.interval=function(f,t,d){
 };
 interval.cancel=function(_this){
     _this.isout=true;
-    _this=undefined;
+    _this=null;
 };
 
 var mongodb=require("mongodb");
@@ -103,6 +103,7 @@ module.exports=function(req,res){
         }
         req.sbodys={};
         req.getSession_num=0;
+        req.fns=[];
         req.getSessionId=function(){
             return ExS;
         };
@@ -180,11 +181,17 @@ module.exports=function(req,res){
                 });
             });
         };
+        var reqtimer;
         req.setFn=function(fn){
-            var timer=interval(function(){
+            req.fns.push(fn);
+            if(reqtimer)return;
+            reqtimer=interval(function(){
                 if(!req.getSession_num){
-                    fn(req.sbodys);
-                    interval.cancel(timer);
+                    for(var vfn of req.fns){
+                        if(vfn(req.sbodys)===false)
+                            break;
+                    }
+                    interval.cancel(reqtimer);
                 }
             },100);
         };

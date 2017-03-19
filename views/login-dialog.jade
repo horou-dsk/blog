@@ -1,0 +1,35 @@
+div.login-dialog-container.out
+  div.login-bg
+  div.login-modal
+    div.btns-title
+      span.tab-btn.active 登录
+      span.tab-btn 注册
+      span.tab-btn 忘记密码
+      span.fontello.icon-cancel.close-dialog
+    form.login-form
+      div.l-row
+        span 欢迎登录Red_ButterFly的博客
+      div.l-row
+        i.fontello.icon-user
+        input.inp(name="username")
+      div.l-row
+        i.fontello.icon-lock
+        input.inp(name="password", type="password")
+      div.l-row
+        label
+          input.check(type="checkbox", name="autologin")
+          i.check-box
+            span.fontello.icon-ok
+          span 下次自动登录
+      button.login-btn(type="button")
+        span.fontello.icon-ok
+        span 登录
+    form.register-form(style="display:none")
+      div.l-row
+        span 对不起，该网站暂不提供注册
+      button.register-btn(disabled="true")
+        span.fontello.icon-cancel
+        span 注册
+    form.forget-pwd(style='display:none')
+      div.l-row
+        span 该背时
