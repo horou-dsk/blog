@@ -222,11 +222,11 @@
                     },
                     success:function(req){
                         if(req.status){
-                            layer.show("登录成功!^_^",function(){
+                            layer.show(req.msg,function(){
                                 location.reload();
                             });
                         }else{
-                            layer.show("用户名或密码错误!T T");
+                            layer.show(req.msg);
                         }
                     }
                 });
@@ -354,7 +354,15 @@
             let layer=new xly_layer();
             let newTabBtn=$('.addnew-tabbtn');
             let tabsText=`<div class="tabs"><span class="fontello icon-tabs"></span><input type="text" required placeholder="标签"><span class="fontello icon-trash-empty"></span></div>`;
-            let tabs_num=$('.tabs-num'),tabsNum=0;
+            let tabs_num=$('.tabs-num'),tabsNum=$('.tabs input').length;
+            tabs_num.text(tabsNum);
+            function deleteTab(){
+                $(this).parent().remove();
+                tabsNum--;
+                tabs_num.text(tabsNum);
+                newBtnDis();
+            }
+            $('.tabs .icon-trash-empty').on('click',deleteTab)
             function newBtnDis(){
                 if(tabsNum>=10){
                     newTabBtn.attr('disabled','disabled')
@@ -362,24 +370,19 @@
                     newTabBtn.removeAttr('disabled');
                 }
             }
-            newTabBtn.on('click',function () {
+            function tabBtnE(){
                 let tab=$(tabsText);
-                tab.find('.icon-trash-empty').on('click',function () {
-                    tab.remove();
-                    tabsNum--;
-                    tabs_num.text(tabsNum);
-                    newBtnDis();
-                });
+                tab.find('.icon-trash-empty').on('click',deleteTab);
                 $(this).before(tab);
                 tabsNum++;
                 tabs_num.text(tabsNum);
                 newBtnDis();
-            });
-            subPost.on("click",function () {
+            }
+            function subPostE(){
                 var tabs=$('.tabs input'),tabsData="";
                 tabs.each(function () {
                     if(this.value!='')
-                    tabsData+=this.value+",";
+                        tabsData+=this.value+",";
                 });
                 tabsData=tabsData.replace(/,$/,'');
                 console.log(tabsData);
@@ -398,8 +401,10 @@
                             layer.show(req.msg);
                         }
                     }
-                })
-            });
+                });
+            }
+            newTabBtn.on('click',tabBtnE);
+            subPost.on("click",subPostE);
         }
 
         postContent(){

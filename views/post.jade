@@ -12,5 +12,8 @@ block content
             span.fontello.icon-tabs  #{bloginfo.tabs}
           span.fontello.icon-clock  #{bloginfo.create_date}
           span.fontello.icon-user  #{bloginfo.name}
+          if(currentUser)
+            a(href="/account/?tab=edit-post&ptid=#{bloginfo.id}")
+              span.fontello.icon-edit  编辑
         div.entry-content!=bloginfo.content
       div.user-info

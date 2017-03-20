@@ -67,9 +67,9 @@ module.exports={
             }
             req.getSession(function(e){
                 if(e&&e.id){
-                    res.send({status:1});
+                    res.send({status:1,msg:"登录成功!^_^"});
                 }else{
-                    res.send({status:0});
+                    res.send({status:0,msg:"用户名或密码错误!T T"});
                 }
             });
         });
@@ -85,7 +85,30 @@ module.exports={
     account:function(req,res){
         req.getSession(function (reqs) {
             let ac=req.query.tab||'new-post';
-            res.render('account',{title:'会员账号',userinfo:reqs,inmodal:ac});
+            let title='会员账号';
+            switch (ac){
+                case 'new-post':
+                    title='发布帖子';
+                    break;
+                case 'edit-post':
+                    ac='new-post';
+                    let blogId=req.query.ptid;
+                    if(!blogId)break;
+                    title="修改帖子";
+                    let sql="select * from users join blogarticles on users.id=blogarticles.user_id where blogarticles.id=?";
+                    mysqldb.query(sql,[blogId],function (err,datas) {
+                        if(err)return console.log(err);
+                        let data=datas[0];
+                        if(data.tabs){
+                            data.tabs=data.tabs.split(",");
+                        }else{
+                            data.tabs=[];
+                        }
+                        res.render('account',{title:title,userinfo:reqs,inmodal:ac,bloginfo:data});
+                    });
+                    return;
+            }
+            res.render('account',{title:title,userinfo:reqs,inmodal:ac,bloginfo:{}});
         });
     },
     editorimg:function (req,res) {
@@ -192,7 +215,11 @@ module.exports={
                 }else{
                     data.create_date=Math.floor(hour/24/30/12)+"年前";
                 }
-                res.render('post',{title:"文章标题",userinfo:reqs,bloginfo:data});
+                let isUser=false;
+                if(reqs.id&&reqs.id===data.user_id){
+                    isUser=true;
+                }
+                res.render('post',{title:"文章标题",userinfo:reqs,bloginfo:data,currentUser:isUser});
             });
         });
     }

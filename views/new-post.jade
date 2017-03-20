@@ -15,6 +15,12 @@ div.new-post(y_ctrl="newpost")
       div.left-title
         label 标签<br><span>(<span class="tabs-num">0</span>/10)</span>
       div.r-content
+        if(bloginfo&&bloginfo.tabs)
+          each tab in bloginfo.tabs
+            div.tabs
+              span.fontello.icon-tabs
+              input(type="text",placeholder="标签",value=tab)
+              span.fontello.icon-trash-empty
         button.addnew-tabbtn(type="button")
           span.fontello.icon-plus   新标签
     div.i-row
