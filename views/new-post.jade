@@ -4,13 +4,13 @@ div.new-post(y_ctrl="newpost")
       div.left-title
         label 文章标题
       div.r-content
-        input(type="text",name="title",placeholder="文章标题")#post-title
+        input(type="text",name="title",placeholder="文章标题",value=bloginfo.title)#post-title
     div.i-row
       div.left-title
         label 文章内容
       div.r-content
         div#editor-container.container
-          div#editor-trigger
+          div#editor-trigger!=bloginfo.content
     div.i-row
       div.left-title
         label 标签<br><span>(<span class="tabs-num">0</span>/10)</span>
@@ -29,4 +29,7 @@ div.new-post(y_ctrl="newpost")
       div.r-content
         button(type="button")#subPost
           span.fontello.icon-ok
-          span 提交
+          if(bloginfo)
+            span  保存修改
+          else
+            span  提交

@@ -2,6 +2,18 @@ var formidable=require('formidable');
 var fs=require('fs');
 var path=require('path');
 const crypto = require('crypto');
+function birthdayToAge(birthday){
+    let currentTime=new Date();
+    let age=currentTime.getFullYear()-birthday.getFullYear(),monthX=currentTime.getMonth()-birthday.getMonth();
+    if(monthX<0){
+        age--;
+    }else if(monthX===0){
+        if(currentTime.getDate()-birthday.getDate()<0){
+            age--;
+        }
+    }
+    return age;
+}
 module.exports={
     home:function(req,res){
         mysqldb.query("select * from users join blogarticles on users.id=blogarticles.user_id",function(err,data,fields){
@@ -63,7 +75,8 @@ module.exports={
                 }else{
                     expireTime=null;
                 }
-                req.setSession({id:v.id,name:v.name,age:v.age,email:v.email,head:v.head,expireTime:expireTime});
+                let age=birthdayToAge(new Date(v.birthday));
+                req.setSession({id:v.id,name:v.name,age:age,email:v.email,head:v.head,expireTime:expireTime});
             }
             req.getSession(function(e){
                 if(e&&e.id){
@@ -104,7 +117,11 @@ module.exports={
                         }else{
                             data.tabs=[];
                         }
-                        res.render('account',{title:title,userinfo:reqs,inmodal:ac,bloginfo:data});
+                        if(reqs.id!=data.user_id){
+                            res.redirect('/');
+                        }else{
+                            res.render('account',{title:title,userinfo:reqs,inmodal:ac,bloginfo:data});
+                        }
                     });
                     return;
             }
@@ -187,11 +204,19 @@ module.exports={
             res.send({status:0,msg:"请输入文章内容^ ^"});
         }else{
             req.getSession(function (user) {
-                mysqldb.query('insert into blogarticles(title,content,tabs,create_date,user_id) value(?,?,?,?,?)',
-                    [postdata.title,postdata.content,postdata.tabs,new Date(),user.id],function(err){
-                    if(err)return console.log(err);
-                    res.send({status:1,msg:"提交成功！"});
-                });
+                if(postdata.ptid){
+                    mysqldb.query('update blogarticles set title=?,content=?,tabs=? where id=?',
+                    [postdata.title,postdata.content,postdata.tabs,postdata.ptid],function (err,datas) {
+                            if(err)return console.log(err);
+                            res.send({status:1,msg:"修改成功！"});
+                        })
+                }else{
+                    mysqldb.query('insert into blogarticles(title,content,tabs,create_date,user_id) value(?,?,?,?,?)',
+                        [postdata.title,postdata.content,postdata.tabs,new Date(),user.id],function(err){
+                        if(err)return console.log(err);
+                        res.send({status:1,msg:"提交成功！"});
+                    });
+                }
             });
         }
     },

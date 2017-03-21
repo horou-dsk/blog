@@ -165,7 +165,14 @@
             },10);
         }
     };
-
+    function getUrlKey(k){
+        var reg=new RegExp("(\\?|&)"+k+"=([^&]*)(&|$)","i");
+        var value=location.search.match(reg);
+        if(value&&value.length>=3){
+            return value[2];
+        }
+        return null;
+    }
     class Index{
         constructor(){
             console.log("你好");
@@ -378,16 +385,25 @@
                 tabs_num.text(tabsNum);
                 newBtnDis();
             }
+            let ptid=getUrlKey("ptid");
             function subPostE(){
                 var tabs=$('.tabs input'),tabsData="";
+                let legitimate=true;
                 tabs.each(function () {
-                    if(this.value!='')
+                    if(this.value!=''){
+                        if(/[?*\[\],+=_\-()&^%$#@!~`.\/\\]/.test(this.value)){
+                            legitimate=false;
+                            return false;
+                        }
                         tabsData+=this.value+",";
+                    }
                 });
+                if(!legitimate){
+                    layer.show("标签不能包含特殊符号!");
+                    return;
+                }
                 tabsData=tabsData.replace(/,$/,'');
-                console.log(tabsData);
-                var data={title:$('#post-title').val(),content:editor.$txt.html(),tabs:tabsData};
-                console.log(data);
+                var data={title:$('#post-title').val(),content:editor.$txt.html(),tabs:tabsData,ptid:ptid};
                 $ajax({
                     type:"POST",
                     url:"/newpost",
