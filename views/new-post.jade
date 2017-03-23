@@ -29,7 +29,7 @@ div.new-post(y_ctrl="newpost")
       div.r-content
         button(type="button")#subPost
           span.fontello.icon-ok
-          if(bloginfo)
+          if(bloginfo.id)
             span  保存修改
           else
             span  提交

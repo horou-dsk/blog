@@ -111,6 +111,7 @@ module.exports={
                     let sql="select * from users join blogarticles on users.id=blogarticles.user_id where blogarticles.id=?";
                     mysqldb.query(sql,[blogId],function (err,datas) {
                         if(err)return console.log(err);
+                        if(!datas.length)return res.redirect('/');
                         let data=datas[0];
                         if(data.tabs){
                             data.tabs=data.tabs.split(",");
@@ -171,7 +172,7 @@ module.exports={
                         // 保存成功
                         console.log('fs.rename done');
                         // 拼接图片url地址
-                        result = 'http://localhost:22220/images/post/' + filename;
+                        result = '/images/post/' + filename;
                     }
 
                     // 返回结果
