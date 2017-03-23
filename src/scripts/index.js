@@ -218,7 +218,7 @@
             var login_form=$(".login-form")[0],
                 login_sub=$(".login-form .login-btn")[0],
                 layer=new xly_layer();
-            login_sub.addEventListener("click",function(){
+            function loginFn(){
                 $ajax({
                     type:"POST",
                     url:"/login",
@@ -237,7 +237,12 @@
                         }
                     }
                 });
+            }
+            login_form.password.addEventListener('keypress',function(e){
+                if(e.keyCode===13)
+                    loginFn();
             });
+            login_sub.addEventListener("click",loginFn);
         }
 
         home(){
